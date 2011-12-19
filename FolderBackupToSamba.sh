@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Script for take a MySQL snapshot and save it to a Windows/Samba share
-# Config should be under /usr/local/etc/SQLBackupToSamba.cfg
+# Script for take a folder snapshot and save it to a Windows/Samba share
+# Config should be under /usr/local/etc/FolderBackupToSamba.cfg
 #
 # @author Christoph S. Ackermann <info@acki.be>
 
-source /usr/local/etc/SQLBackupToSamba.cfg
+source /usr/local/etc/FolderBackupToSamba.cfg
 
 if [ ! -d $MOUNTFOLDER ]; then
 	mkdir $MOUNTFOLDER
@@ -18,7 +18,7 @@ date=`date -d "$ndate 00:00" +%s`
 
 tdate=$(($KEEPDAYS*86400))
 
-if [ -f $MOUNTFOLDER/backup.$ndate.sql.gz ]; then
+if [ -f $MOUNTFOLDER/backup.${BACKUPFOLDER//\//}.$ndate.sql.gz ]; then
 	echo "Backup from today already exists. Do nothing."
 	exit 1
 fi
@@ -35,8 +35,7 @@ do
 	fi
 done
 
-mysqldump -u$SQLUSER -p$SQLPASS --all-databases > $MOUNTFOLDER/backup.$ndate.sql
-gzip $MOUNTFOLDER/backup.$ndate.sql
+tar cvfz $MOUNTFOLDER/backup.${BACKUPFOLDER//\//}.$ndate.tgz $BACKUPFOLDER
 
 umount $MOUNTFOLDER
 
@@ -44,5 +43,5 @@ sleep 1
 
 rm -rf $MOUNTFOLDER
 
-echo "Created backup from SQL database to \"$SMBFOLDER\" named backup.$ndate.sql.gz"
+echo "Created backup from folder \"$BACKUPFOLDER\" to \"$SMBFOLDER\" named backup.${BACKUPFOLDER//\//}.$ndate.sql.gz"
 exit 0
