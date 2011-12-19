@@ -35,7 +35,7 @@ do
 	fi
 done
 
-tar cvfz $MOUNTFOLDER/backup.${BACKUPFOLDER//\//}.$ndate.tgz $BACKUPFOLDER
+tar cfz $MOUNTFOLDER/backup.${BACKUPFOLDER//\//}.$ndate.tgz $BACKUPFOLDER > /dev/null
 
 umount $MOUNTFOLDER
 
