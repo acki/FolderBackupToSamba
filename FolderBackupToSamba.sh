@@ -28,7 +28,7 @@ files=$(find $MOUNTFOLDER -type f -name "*.sql*")
 for file in $files
 do
 	arr=(${file//./ })
-	compare=`date -d ${arr[1]} +%s`
+	compare=`date -d ${arr[2]} +%s`
 	limit=$(($date-$tdate))
 	if [[ $compare < $limit ]]; then
 		rm $file
