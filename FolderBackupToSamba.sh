@@ -20,6 +20,9 @@ tdate=$(($KEEPDAYS*86400))
 
 if [ -f $MOUNTFOLDER/backup.${BACKUPFOLDER//\//}.$ndate.tgz ]; then
 	echo "Backup from today already exists. Do nothing."
+	umount $MOUNTFOLDER
+	sleep 1
+	rm -rf $MOUNTFOLDER
 	exit 1
 fi
 
